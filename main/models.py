@@ -9,7 +9,7 @@ from django.db import models
 
 
 class TestTable(models.Model):
-    id = models.CharField(db_column='ID', primary_key=True, max_length=30)  # Field name made lowercase.
+    id = models.AutoField(db_column='ID',primary_key=True) # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=30)  # Field name made lowercase.
     position = models.CharField(db_column='Position', max_length=30)  # Field name made lowercase.
     doj = models.DateField(db_column='DOJ')  # Field name made lowercase.

@@ -18,7 +18,6 @@ class TestForm(forms.ModelForm):
     # Date_of_Joining=forms.DateField(required=True)
     # Salary=forms.FloatField(required=True)
     # Profile_image=forms.FileField(required=True)
-    id=forms.CharField(initial=str(uuid.uuid5(uuid.NAMESPACE_URL, url))[:8],widget = forms.HiddenInput())
     # def save(self, commit = True):
     #     # print(self.cleaned_data)
     #     instance = super().save(commit=False)
