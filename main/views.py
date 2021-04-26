@@ -54,7 +54,7 @@ class init_functs(View):
         request_form=request.GET.dict()
         if len(request.GET.dict())!=0:
             Id=request_form['id']
-            queryset=TestTable.objects.filter(id=Id)
+            queryset=TestTable.objects.get(id=Id)
             print(type(queryset))
             print(queryset.values())
             queryset_ret=list(queryset.values())
@@ -71,66 +71,98 @@ class init_functs(View):
             qwerty=MultiPartParser(request.META, request, request.upload_handlers).parse()
             # print(type(qwerty),qwerty)
             form=qwerty[0].dict()
-            # print(form)
+            print(form)
             identifier=form["Identifier"]
             to_be_changed=form["To be changed"]
+            print(form[to_be_changed],form[identifier])
             # print(identifier,to_be_changed)
             try:
                 if identifier=="Name":
                     if to_be_changed=="Name":
+                        print(form[to_be_changed],form[identifier])
                         updater=TestTable.objects.filter(name=form[identifier]).update(name=form[to_be_changed])
+                        
                     elif to_be_changed=="Position":
-                        updater=TestTable.objects.filter(name=form[identifier]).update(position=form[to_be_changed])
-                    elif to_be_changed=="DOB":
-                        updater=TestTable.objects.filter(name=form[identifier]).update(dob=form[to_be_changed])
+                        print(form[to_be_changed],form[identifier])
+                        updater=TestTable.objects.filter(name__exact=form[identifier]).update(position=form[to_be_changed])
+                        
+                    elif to_be_changed=="Date of birth":
+                        print(form[to_be_changed],form[identifier])
+                        updater=TestTable.objects.filter(name__exact=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
+                        print(updater,"Hello")
+                        
                     elif to_be_changed=="DOJ":
-                        updater=TestTable.objects.filter(name=form[identifier]).update(doj=form[to_be_changed])
+                        print(form[to_be_changed],form[identifier])
+                        updater=TestTable.objects.filter(name__exact=form[identifier]).update(doj=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
+                        
                     elif to_be_changed=="Salary":
-                        updater=TestTable.objects.filter(name=form[identifier]).update(salary=form[to_be_changed])
+                        print(form[to_be_changed],form[identifier])
+                        updater=TestTable.objects.filter(name__exact=form[identifier]).update(salary=form[to_be_changed])
+                        
                 elif identifier=="Position":
                     if to_be_changed=="Name":
-                        updater=TestTable.objects.filter(position=form[identifier]).update(name=form[to_be_changed])
+                        updater=TestTable.objects.filter(position__exact=form[identifier]).update(name=form[to_be_changed])
+                        
                     elif to_be_changed=="Position":
-                        updater=TestTable.objects.filter(position=form[identifier]).update(Position=form[to_be_changed])
-                    elif to_be_changed=="DOB":
-                        updater=TestTable.objects.filter(position=form[identifier]).update(dob=form[to_be_changed])
+                        updater=TestTable.objects.filter(position__exact=form[identifier]).update(Position=form[to_be_changed])
+                        
+                    elif to_be_changed=="Date of birth":
+                        updater=TestTable.objects.filter(position__exact=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
+                        
                     elif to_be_changed=="DOJ":
-                        updater=TestTable.objects.filter(position=form[identifier]).update(doj=form[to_be_changed])
+                        updater=TestTable.objects.filter(position__exact=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
+                        
                     elif to_be_changed=="Salary":
-                        updater=TestTable.objects.filter(position=form[identifier]).update(salary=form[to_be_changed])
-                elif identifier=="DOB":
+                        updater=TestTable.objects.filter(position__exact=form[identifier]).update(salary=form[to_be_changed])
+                        
+                elif identifier=="Date of birth":
                     if to_be_changed=="Name":
                         updater=TestTable.objects.filter(dob=form[identifier]).update(name=form[to_be_changed])
+                        
                     elif to_be_changed=="Position":
                         updater=TestTable.objects.filter(dob=form[identifier]).update(Position=form[to_be_changed])
-                    elif to_be_changed=="DOB":
-                        updater=TestTable.objects.filter(dob=form[identifier]).update(dob=form[to_be_changed])
+                        
+                    elif to_be_changed=="Date of birth":
+                        updater=TestTable.objects.filter(dob=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
+                        
                     elif to_be_changed=="DOJ":
-                        updater=TestTable.objects.filter(dob=form[identifier]).update(doj=form[to_be_changed])
+                        updater=TestTable.objects.filter(dob=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
+                        
                     elif to_be_changed=="Salary":
                         updater=TestTable.objects.filter(dob=form[identifier]).update(salary=form[to_be_changed])
+                        
                 elif identifier=="DOJ":
                     if to_be_changed=="Name":
                         updater=TestTable.objects.filter(doj=form[identifier]).update(name=form[to_be_changed])
+                        
                     elif to_be_changed=="Position":
                         updater=TestTable.objects.filter(doj=form[identifier]).update(Position=form[to_be_changed])
-                    elif to_be_changed=="DOB":
-                        updater=TestTable.objects.filter(doj=form[identifier]).update(dob=form[to_be_changed])
+                        
+                    elif to_be_changed=="Date of birth":
+                        updater=TestTable.objects.filter(doj=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
+                        
                     elif to_be_changed=="DOJ":
-                        updater=TestTable.objects.filter(doj=form[identifier]).update(doj=form[to_be_changed])
+                        updater=TestTable.objects.filter(doj=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
+                        
                     elif to_be_changed=="Salary":
                         updater=TestTable.objects.filter(doj=form[identifier]).update(salary=form[to_be_changed])
+                        
                 elif identifier=="Salary":
                     if to_be_changed=="Name":
                         updater=TestTable.objects.filter(salary=form[identifier]).update(name=form[to_be_changed])
+                        
                     elif to_be_changed=="Position":
                         updater=TestTable.objects.filter(salary=form[identifier]).update(Position=form[to_be_changed])
-                    elif to_be_changed=="DOB":
-                        updater=TestTable.objects.filter(salary=form[identifier]).update(dob=form[to_be_changed])
+                        
+                    elif to_be_changed=="Date of birth":
+                        updater=TestTable.objects.filter(salary=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
+                        
                     elif to_be_changed=="DOJ":
-                        updater=TestTable.objects.filter(salary=form[identifier]).update(doj=form[to_be_changed])
+                        updater=TestTable.objects.filter(salary=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
+                        
                     elif to_be_changed=="Salary":
                         updater=TestTable.objects.filter(salary=form[identifier]).update(salary=form[to_be_changed])
+                        
             except Exception as e:
                 print(e)
                 return HttpResponse("fail")
@@ -139,14 +171,14 @@ class init_functs(View):
         qwerty=MultiPartParser(request.META, request, request.upload_handlers).parse()
         form=qwerty[0].dict()
         identifier=form["Identifier"]
-        file_names=TestTable.objects.filter(name=form[identifier]).values_list('profile_image').values()
+        file_names=TestTable.objects.filter(name__exact=form[identifier]).values_list('profile_image').values()
         print(file_names)
         try:
             if identifier=="Name":    
-                updater=TestTable.objects.filter(name=form[identifier]).delete()
+                updater=TestTable.objects.filter(name__exact=form[identifier]).delete()
             elif identifier=="Position":
-                updater=TestTable.objects.filter(position=form[identifier]).delete()
-            elif identifier=="DOB":
+                updater=TestTable.objects.filter(position__exact=form[identifier]).delete()
+            elif identifier=="Date of birth":
                 updater=TestTable.objects.filter(dob=form[identifier]).delete()
             elif identifier=="DOJ":
                 updater=TestTable.objects.filter(doj=form[identifier]).delete()
