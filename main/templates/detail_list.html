@@ -1,0 +1,9 @@
+
+{% block content %}
+<p><strong>Name:</strong>{{dets.name}}</p>
+<p><strong>Position:</strong>{{dets.position}}</p>
+<p><strong>Salary:</strong>{{dets.salary}}</p>
+<p><strong>Date of Birth:</strong>{{dets.dob}}</p>
+<p><strong>Date of Joining:</strong>{{dets.doj}}</p>
+<p><strong>Profile Image:</strong><br><img src="{{ dets.profile_image.url }}" alt="{{dets.name}}"></p>
+{% endblock %}

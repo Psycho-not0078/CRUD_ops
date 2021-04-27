@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from .models import *
 from .forms import *
 from airline_management_system.settings import *
-from django.views import View
+from django.views import View,generic
 from django.views.decorators.csrf import *
 from django.utils.decorators import method_decorator
 from django.http.multipartparser import MultiPartParser
@@ -53,14 +53,10 @@ class init_functs(View):
     def get(self,request):#R
         request_form=request.GET.dict()
         if len(request.GET.dict())!=0:
-            Id=request_form['id']
+            Id=request_form['Id']
             queryset=TestTable.objects.get(id=Id)
-            print(type(queryset))
-            print(queryset.values())
-            queryset_ret=list(queryset.values())
-            print(queryset_ret)
-            queryset_ret[0]["file_url"]="127.0.0.1:8000/media/"+queryset_ret[0]["profile_image"]
-            return JsonResponse(queryset_ret[0])
+            lists=get_object_or_404(TestTable,id=Id)
+            return render(request, 'detail_list.html', context={'dets': lists})
         else:
             context ={}
             form=TestForm()
@@ -71,32 +67,32 @@ class init_functs(View):
             qwerty=MultiPartParser(request.META, request, request.upload_handlers).parse()
             # print(type(qwerty),qwerty)
             form=qwerty[0].dict()
-            print(form)
+            #print(form)
             identifier=form["Identifier"]
             to_be_changed=form["To be changed"]
-            print(form[to_be_changed],form[identifier])
+            #print(form[to_be_changed],form[identifier])
             # print(identifier,to_be_changed)
             try:
                 if identifier=="Name":
                     if to_be_changed=="Name":
-                        print(form[to_be_changed],form[identifier])
+                        #print(form[to_be_changed],form[identifier])
                         updater=TestTable.objects.filter(name=form[identifier]).update(name=form[to_be_changed])
                         
                     elif to_be_changed=="Position":
-                        print(form[to_be_changed],form[identifier])
+                        #print(form[to_be_changed],form[identifier])
                         updater=TestTable.objects.filter(name__exact=form[identifier]).update(position=form[to_be_changed])
                         
                     elif to_be_changed=="Date of birth":
-                        print(form[to_be_changed],form[identifier])
+                        #print(form[to_be_changed],form[identifier])
                         updater=TestTable.objects.filter(name__exact=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        print(updater,"Hello")
+                        #print(updater,"Hello")
                         
                     elif to_be_changed=="DOJ":
-                        print(form[to_be_changed],form[identifier])
+                        #print(form[to_be_changed],form[identifier])
                         updater=TestTable.objects.filter(name__exact=form[identifier]).update(doj=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
                         
                     elif to_be_changed=="Salary":
-                        print(form[to_be_changed],form[identifier])
+                        #print(form[to_be_changed],form[identifier])
                         updater=TestTable.objects.filter(name__exact=form[identifier]).update(salary=form[to_be_changed])
                         
                 elif identifier=="Position":
@@ -164,14 +160,14 @@ class init_functs(View):
                         updater=TestTable.objects.filter(salary=form[identifier]).update(salary=form[to_be_changed])
                         
             except Exception as e:
-                print(e)
+                #print(e)
                 return HttpResponse("fail")
             return HttpResponse("success")            
     def delete(self,request):#D
         qwerty=MultiPartParser(request.META, request, request.upload_handlers).parse()
         form=qwerty[0].dict()
         identifier=form["Identifier"]
-        file_names=TestTable.objects.filter(name__exact=form[identifier]).values_list('profile_image').values()
+        file_names=TestTable.objects.filter(name__exact=form[identifier]).values('profile_image')
         print(file_names)
         try:
             if identifier=="Name":    
@@ -186,7 +182,13 @@ class init_functs(View):
                 updater=TestTable.objects.filter(salary=form[identifier]).delete()
             for i in file_names:
                 file=os.path.join(MEDIA_ROOT,i)
-                os.remove(i)
+                print(file)
+                os.remove(file)
         except:
             return HttpResponse("fail")
         return HttpResponse("success")
+class lister(generic.DetailView):
+    model=TestTable
+    def get_queryset(self,var):
+        return TestTable.objects.filter(id=var)
+        
