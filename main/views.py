@@ -75,24 +75,12 @@ class init_functs(View):
             try:
                 if identifier=="Name":
                     if to_be_changed=="Name":
-                        #print(form[to_be_changed],form[identifier])
                         updater=TestTable.objects.filter(name=form[identifier]).update(name=form[to_be_changed])
                         
                     elif to_be_changed=="Position":
-                        #print(form[to_be_changed],form[identifier])
                         updater=TestTable.objects.filter(name__exact=form[identifier]).update(position=form[to_be_changed])
-                        
-                    elif to_be_changed=="Date of birth":
-                        #print(form[to_be_changed],form[identifier])
-                        updater=TestTable.objects.filter(name__exact=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        #print(updater,"Hello")
-                        
-                    elif to_be_changed=="DOJ":
-                        #print(form[to_be_changed],form[identifier])
-                        updater=TestTable.objects.filter(name__exact=form[identifier]).update(doj=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        
+                                                                      
                     elif to_be_changed=="Salary":
-                        #print(form[to_be_changed],form[identifier])
                         updater=TestTable.objects.filter(name__exact=form[identifier]).update(salary=form[to_be_changed])
                         
                 elif identifier=="Position":
@@ -101,13 +89,7 @@ class init_functs(View):
                         
                     elif to_be_changed=="Position":
                         updater=TestTable.objects.filter(position__exact=form[identifier]).update(Position=form[to_be_changed])
-                        
-                    elif to_be_changed=="Date of birth":
-                        updater=TestTable.objects.filter(position__exact=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        
-                    elif to_be_changed=="DOJ":
-                        updater=TestTable.objects.filter(position__exact=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        
+                                                                     
                     elif to_be_changed=="Salary":
                         updater=TestTable.objects.filter(position__exact=form[identifier]).update(salary=form[to_be_changed])
                         
@@ -117,13 +99,7 @@ class init_functs(View):
                         
                     elif to_be_changed=="Position":
                         updater=TestTable.objects.filter(dob=form[identifier]).update(Position=form[to_be_changed])
-                        
-                    elif to_be_changed=="Date of birth":
-                        updater=TestTable.objects.filter(dob=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        
-                    elif to_be_changed=="DOJ":
-                        updater=TestTable.objects.filter(dob=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        
+                                                                      
                     elif to_be_changed=="Salary":
                         updater=TestTable.objects.filter(dob=form[identifier]).update(salary=form[to_be_changed])
                         
@@ -133,13 +109,7 @@ class init_functs(View):
                         
                     elif to_be_changed=="Position":
                         updater=TestTable.objects.filter(doj=form[identifier]).update(Position=form[to_be_changed])
-                        
-                    elif to_be_changed=="Date of birth":
-                        updater=TestTable.objects.filter(doj=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        
-                    elif to_be_changed=="DOJ":
-                        updater=TestTable.objects.filter(doj=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        
+                                                                     
                     elif to_be_changed=="Salary":
                         updater=TestTable.objects.filter(doj=form[identifier]).update(salary=form[to_be_changed])
                         
@@ -149,13 +119,7 @@ class init_functs(View):
                         
                     elif to_be_changed=="Position":
                         updater=TestTable.objects.filter(salary=form[identifier]).update(Position=form[to_be_changed])
-                        
-                    elif to_be_changed=="Date of birth":
-                        updater=TestTable.objects.filter(salary=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        
-                    elif to_be_changed=="DOJ":
-                        updater=TestTable.objects.filter(salary=form[identifier]).update(dob=datetime.strptime(form[to_be_changed],"%d-%m-%Y"))
-                        
+                                              
                     elif to_be_changed=="Salary":
                         updater=TestTable.objects.filter(salary=form[identifier]).update(salary=form[to_be_changed])
                         
@@ -171,13 +135,13 @@ class init_functs(View):
         print("names of files: ",file_names)
         print("Length = ",len(file_names))
         try:
-            print("In try")
+            # print("In try")
             for i in file_names:
                 print("here",i)
                 file=os.path.join(MEDIA_ROOT,i['profile_image'])
                 print("names: ",file)
                 os.remove(file)
-            print("end of loop")
+            # print("end of loop")
             if identifier=="Name":    
                 updater=TestTable.objects.filter(name__exact=form[identifier]).delete()
             elif identifier=="Position":
@@ -188,7 +152,15 @@ class init_functs(View):
                 updater=TestTable.objects.filter(doj=form[identifier]).delete()
             elif identifier=="Salary":
                 updater=TestTable.objects.filter(salary=form[identifier]).delete()
-            print("End of try")
+            elif identifier=="Gender":
+                updater=TestTable.objects.filter(gender=form[identifier]).delete()
+            elif identifier=="Age":
+                updater=TestTable.objects.filter(age=form[identifier]).delete()
+            elif identifier=="Permanent Employee":
+                updater=TestTable.objects.filter(permanent_employee=form[identifier]).delete()
+            elif identifier=="Bio":
+                updater=TestTable.objects.filter(bio=form[identifier]).delete()
+            # print("End of try")
         except Exception as e:
             print (e)
             return HttpResponse("fail"+str(e))
