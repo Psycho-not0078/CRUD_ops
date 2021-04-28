@@ -12,7 +12,6 @@ import uuid
 import json  
 from django.core.serializers.json import DjangoJSONEncoder
 
-url = "https://www.geeksforgeeks.org/fibonacci-sum-subset-elements/"
 
 def create(request):#C
     context ={}
@@ -49,11 +48,12 @@ class init_functs(View):
             form = TestForm()
             return HttpResponse("success")
         else:
+            print(form.errors)
             return HttpResponse("fail")
     def get(self,request):#R
         request_form=request.GET.dict()
         if len(request.GET.dict())!=0:
-            Id=request_form['Id']
+            Id=request_form['id']
             queryset=TestTable.objects.get(id=Id)
             lists=get_object_or_404(TestTable,id=Id)
             return render(request, 'detail_list.html', context={'dets': lists})
@@ -168,8 +168,16 @@ class init_functs(View):
         form=qwerty[0].dict()
         identifier=form["Identifier"]
         file_names=TestTable.objects.filter(name__exact=form[identifier]).values('profile_image')
-        print(file_names)
+        print("names of files: ",file_names)
+        print("Length = ",len(file_names))
         try:
+            print("In try")
+            for i in file_names:
+                print("here",i)
+                file=os.path.join(MEDIA_ROOT,i['profile_image'])
+                print("names: ",file)
+                os.remove(file)
+            print("end of loop")
             if identifier=="Name":    
                 updater=TestTable.objects.filter(name__exact=form[identifier]).delete()
             elif identifier=="Position":
@@ -180,12 +188,10 @@ class init_functs(View):
                 updater=TestTable.objects.filter(doj=form[identifier]).delete()
             elif identifier=="Salary":
                 updater=TestTable.objects.filter(salary=form[identifier]).delete()
-            for i in file_names:
-                file=os.path.join(MEDIA_ROOT,i)
-                print(file)
-                os.remove(file)
-        except:
-            return HttpResponse("fail")
+            print("End of try")
+        except Exception as e:
+            print (e)
+            return HttpResponse("fail"+str(e))
         return HttpResponse("success")
 class lister(generic.DetailView):
     model=TestTable

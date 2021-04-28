@@ -37,12 +37,27 @@ class TestForm(forms.ModelForm):
 
         
     class Meta:
+        Position_Choices=(("Ground Staff","Ground Staff"),("Pilot","Pilot"),("Cabin Crew","Cabin Crew"),("Engineer","Engineer"),("RnD","RnD"),("Cleaning Crew","Cleaning Crew"))
+        Gender_Choices=(
+            ('Male','Male'),('Female','Female'),('Other','Other'),('Not disclosing','Not disclosing')
+        )
+        PrefferedShifts_Choices=(
+            ('early-morning','early morning'),('morning','morning'),('noon','noon'),('afternoon','afternoon'),('early evening','early evening'),('late evening','late evening'),('night','night')
+        )
         model = TestTable
-        fields = ("id","name","position","doj","dob","salary",'profile_image')
+        fields = (
+            "id","name",'profile_image',"position","dob","gender","bio","doj","salary","preffered_shifts","permanent_employee","age"
+        )
         widgets = {
         'doj': forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date','required':True}),
         'dob': forms.DateInput(format=('%d/%m/%Y'), attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date','required':True}),
-        'profile_image':forms.FileInput(),
+        'profile_image':forms.ClearableFileInput(),
+        'position': forms.Select(choices=Position_Choices),
+        'preffered_shifts':forms.CheckboxSelectMultiple(choices=PrefferedShifts_Choices),
+        'gender': forms.RadioSelect(choices=Gender_Choices),
+        'permanent_employee':forms.CheckboxInput(),
+        'salary':forms.NumberInput(),
+        'age':forms.NumberInput(),
         'id':forms.HiddenInput()
         }
 
