@@ -1,0 +1,10 @@
+<form method="POST" name="_method" enctype="multipart/form-data">
+  
+    {% csrf_token %}
+  
+    {{ form.as_p }}
+    {{form.errors}}
+    <img src="{{ mod.profile_image.url }}"></img>
+
+    <input type="submit" value="Submit">
+</form>

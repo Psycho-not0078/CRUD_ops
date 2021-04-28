@@ -169,4 +169,25 @@ class lister(generic.DetailView):
     model=TestTable
     def get_queryset(self,var):
         return TestTable.objects.filter(id=var)
-        
+    
+class editer(View):
+    def post(self,request,id):
+        mod=TestTable.objects.get(id=id)
+        form=TestForm()
+        if form.isValid():
+            form.save(instance=mod)
+        return 0
+
+    def get(self,request,id):
+        mod=TestTable.objects.filter(id=id).values()
+        queryset=TestTable.objects.get(id=id)
+        lists=get_object_or_404(TestTable,id=id)
+        form=TestForm1(initial=mod[0])
+        return render(request,"update.html",{"form":form,"mod":lists})
+    
+def edit(request):
+    if request.method=="POST":
+        id=request.POST.get("id")
+        return redirect("edit/"+id)
+    else:
+        return render(request,"edit.html")
