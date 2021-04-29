@@ -45,7 +45,6 @@ class init_functs(View):
         form = TestForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
-            form = TestForm()
             return HttpResponse("success")
         else:
             print(form.errors)
@@ -165,18 +164,16 @@ class init_functs(View):
             print (e)
             return HttpResponse("fail"+str(e))
         return HttpResponse("success")
-class lister(generic.DetailView):
-    model=TestTable
-    def get_queryset(self,var):
-        return TestTable.objects.filter(id=var)
-    
+
 class editer(View):
     def post(self,request,id):
         mod=TestTable.objects.get(id=id)
-        form=TestForm()
-        if form.isValid():
+        form=TestForm(request.POST,request.FILES)
+        if form.is_valid():
             form.save(instance=mod)
-        return 0
+        else:
+            print(form.errors)
+        return HttpResponse("success")
 
     def get(self,request,id):
         mod=TestTable.objects.filter(id=id).values()

@@ -8,5 +8,4 @@ urlpatterns = [
     path('functs', views.init_functs.as_view()),
     path('edit/<int:id>', views.editer.as_view()),
     path('edit', views.edit),
-    path('list', views.lister.as_view())
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
